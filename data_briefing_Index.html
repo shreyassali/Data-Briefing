@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Engineering Briefing</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f9f9f9;color:#1a1a1a}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:190px;flex-shrink:0;border-right:1px solid #e5e5e5;padding:1rem;background:#fff;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:8px;padding:4px 6px;margin-bottom:1rem}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{font-size:13px;font-weight:600;color:#1a1a1a}
+.logo-sub{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em}
+.sec-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;padding:8px 6px 3px;margin-top:4px}
+.nav{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:6px;cursor:pointer;font-size:12px;color:#555}
+.nav:hover{background:#f3f3f3;color:#1a1a1a}
+.nav.active{background:#EEEDFE;color:#3C3489;font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+.main{flex:1;padding:1.5rem 2rem;max-width:900px}
+.top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+.top-left h1{font-size:20px;font-weight:600;margin-bottom:3px}
+.top-left p{font-size:12px;color:#666}
+.btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;background:#534AB7;color:#fff;font-size:13px;font-weight:500;cursor:pointer}
+.btn:hover{background:#3C3489}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+.fl{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.05em}
+select{font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#1a1a1a;cursor:pointer}
+.banner{display:flex;align-items:center;gap:8px;background:#EAF3DE;border:1px solid #C0DD97;border-radius:8px;padding:8px 12px;margin-bottom:1rem;font-size:12px;color:#3B6D11}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.hdr-title{font-size:14px;font-weight:600}
+.hdr-count{font-size:11px;color:#aaa}
+.card{background:#fff;border:1px solid #eee;border-radius:10px;margin-bottom:10px}
+.card:hover{border-color:#ccc}
+.ch{padding:10px 14px 8px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.badges{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;letter-spacing:.04em;text-transform:uppercase}
+.b-high{background:#FAC775;color:#633806}
+.b-med{background:#f3f3f3;color:#666;border:1px solid #eee}
+.b-ver{background:#EAF3DE;color:#3B6D11;border:1px solid #C0DD97}
+.score-wrap{text-align:right;flex-shrink:0}
+.score-lbl{font-size:9px;color:#aaa;letter-spacing:.06em;text-transform:uppercase}
+.score-num{font-size:20px;font-weight:600}
+.cb{padding:0 14px 10px}
+.ct{font-size:14px;font-weight:600;margin-bottom:3px;line-height:1.4}
+.ct a{color:inherit;text-decoration:none}
+.ct a:hover{color:#534AB7}
+.cs{font-size:11px;color:#aaa;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.grid2{display:grid;grid-template-columns:1fr 175px;gap:12px}
+.sl{font-size:10px;font-weight:600;color:#aaa;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px}
+.st{font-size:12px;color:#555;line-height:1.6}
+.scores-panel{background:#f9f9f9;border-radius:8px;padding:8px 10px}
+.sr{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.sr:last-child{margin-bottom:0}
+.sn{font-size:10px;color:#aaa;text-transform:uppercase;width:68px;flex-shrink:0}
+.sb{flex:1;height:3px;background:#e5e5e5;border-radius:2px;overflow:hidden}
+.sf{height:100%;border-radius:2px;background:#534AB7}
+.sv{font-size:10px;color:#888;width:18px;text-align:right}
+.cf{padding:6px 14px;border-top:1px solid #f0f0f0;display:flex;gap:6px}
+.fb{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #ddd;background:transparent;color:#555;cursor:pointer;display:flex;align-items:center;gap:3px}
+.fb:hover{background:#f3f3f3;color:#1a1a1a}
+.empty{text-align:center;padding:3rem 1rem;color:#aaa}
+.empty h3{font-size:15px;font-weight:500;margin-bottom:5px;color:#333}
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🗄️</div>
+      <div><div class="logo-text">Data Briefing</div><div class="logo-sub">Eng news</div></div>
+    </div>
+    <div class="sec-label">Briefing</div>
+    <div class="nav active" onclick="setNav(this,'all')">📊 Latest</div>
+    <div class="sec-label">Sources</div>
+    <div class="nav" onclick="setNav(this,'Databricks')"><span class="dot" style="background:#EF9F27"></span>Databricks</div>
+    <div class="nav" onclick="setNav(this,'dbt Labs')"><span class="dot" style="background:#F0997B"></span>dbt Labs</div>
+    <div class="nav" onclick="setNav(this,'Snowflake')"><span class="dot" style="background:#85B7EB"></span>Snowflake</div>
+    <div class="nav" onclick="setNav(this,'Airbyte')"><span class="dot" style="background:#5DCAA5"></span>Airbyte</div>
+    <div class="nav" onclick="setNav(this,'Dagster')"><span class="dot" style="background:#7F77DD"></span>Dagster</div>
+    <div class="nav" onclick="setNav(this,'Fivetran')"><span class="dot" style="background:#639922"></span>Fivetran</div>
+    <div class="nav" onclick="setNav(this,'Astronomer')"><span class="dot" style="background:#D4537E"></span>Astronomer</div>
+    <div class="nav" onclick="setNav(this,'Monte Carlo')"><span class="dot" style="background:#888780"></span>Monte Carlo</div>
+    <div class="nav" onclick="setNav(this,'Google Cloud')"><span class="dot" style="background:#534AB7"></span>Google Cloud</div>
+  </div>
+  <div class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <h1>Data engineering briefing</h1>
+        <p id="metaLine">32 posts · 9 sources · All URLs from live blog pages · Jun 2026</p>
+      </div>
+      <button class="btn" onclick="render()">↻ Refresh view</button>
+    </div>
+    <div class="banner">✓ All URLs fetched from live pages · Confluent removed · Monte Carlo → montecarlo.ai/blog · Astronomer, Airbyte, dbt updated</div>
+    <div class="filters">
+      <span class="fl">Window</span>
+      <select id="winSel" onchange="render()">
+        <option value="365" selected>Last 1 year</option>
+        <option value="180">Last 6 months</option>
+        <option value="90">Last 3 months</option>
+        <option value="30">Last 30 days</option>
+      </select>
+      <span class="fl" style="margin-left:6px">Category</span>
+      <select id="catSel" onchange="render()">
+        <option value="all">All</option>
+        <option value="Data Engineering">Data Engineering</option>
+        <option value="Analytics Engineering">Analytics Engineering</option>
+        <option value="Data Platform">Data Platform</option>
+      </select>
+      <span class="fl" style="margin-left:6px">Signal</span>
+      <select id="sigSel" onchange="render()">
+        <option value="all">All</option>
+        <option value="HIGH">High only</option>
+      </select>
+    </div>
+    <div id="feed"></div>
+  </div>
+</div>
+<script>
+const POSTS=[
+  {source:'Databricks',cat:'Data Engineering',color:'#EF9F27',date:'2026-06-05',signal:'HIGH',title:'Enabling Evolutionary Database Development: Database Branching with Lakebase, Part 2',link:'https://www.databricks.com/blog/enabling-evolutionary-database-development-database-branching-lakebase-part-2',snippet:'Part 2 of Databricks\' Lakebase deep dive — isolated database branches for dev and testing without duplicating data, enabling safe schema evolution and CI/CD for database changes.',why:'Database branching closes the gap between software engineering CI/CD and data platform development workflows.',scores:{practical:88,technical:90,market:83,hype_risk:20,urgency:78,overall:86}},
+  {source:'Databricks',cat:'Data Engineering',color:'#EF9F27',date:'2026-06-03',signal:'HIGH',title:'Apache Spark Real-Time Mode for Gaming: A Better Way to Do Real-Time Sessionization',link:'https://www.databricks.com/blog/apache-spark-real-time-mode-gaming-better-way-do-real-time-sessionization',snippet:'Databricks introduces Spark Real-Time Mode — a new execution mode for sub-second sessionization without separate streaming infrastructure. Bridges batch and streaming in a single codebase.',why:'Real-time Spark mode removes the need for two separate codebases for batch and streaming — a major operational win.',scores:{practical:87,technical:92,market:80,hype_risk:22,urgency:76,overall:85}},
+  {source:'Databricks',cat:'Data Engineering',color:'#EF9F27',date:'2026-05-27',signal:'HIGH',title:'How the Lakebase Architecture Stays Resilient to Cloud Failures',link:'https://www.databricks.com/blog/how-lakebase-architecture-stays-resilient-cloud-failures',snippet:'Databricks Engineering explains how Lakebase handles cloud failures — the control-plane architecture designed for the higher throughput and failure patterns introduced by AI agents.',why:'Resilience for agentic workloads is the next engineering frontier — agents create far more control-plane ops than human queries.',scores:{practical:85,technical:92,market:82,hype_risk:18,urgency:78,overall:86}},
+  {source:'Databricks',cat:'Data Engineering',color:'#EF9F27',date:'2026-05-19',signal:'MEDIUM',title:'Databricks Context Engineer Associate: Industry\'s First Certification for AI Agent Systems',link:'https://www.databricks.com/blog/databricks-context-engineer-associate-industrys-first-certification-reliable-ai-agent-systems',snippet:'The Context Engineer Associate certification — first industry credential for building reliable AI agent systems, covering context management, retrieval architectures, and agent reliability patterns.',why:'Formalizing context engineering as a discipline signals that agent reliability is now a distinct engineering role.',scores:{practical:78,technical:72,market:85,hype_risk:28,urgency:72,overall:78}},
+  {source:'Databricks',cat:'Data Engineering',color:'#EF9F27',date:'2026-04-26',signal:'HIGH',title:'The Next Generation of Databricks Genie',link:'https://www.databricks.com/blog/next-generation-databricks-genie',snippet:'Next-gen Genie supports multi-turn reasoning, understands business context from semantic models, and can generate and execute data pipelines — not just queries.',why:'Genie evolving from query assistant to pipeline-generating agent redefines what self-service analytics means.',scores:{practical:88,technical:85,market:90,hype_risk:35,urgency:80,overall:87}},
+
+  {source:'dbt Labs',cat:'Analytics Engineering',color:'#F0997B',date:'2026-06-01',signal:'HIGH',title:'Fivetran and dbt Are One Company Now. Here\'s What That Means.',link:'https://www.getdbt.com/blog/fivetran-and-dbt-are-one-company-now-here-s-what-that-means',snippet:'Tristan Handy\'s post-merger announcement on what the completed Fivetran + dbt Labs merger means for product roadmap, team structure, and the future of the modern data stack. Target: data infrastructure for trusted AI agents.',why:'The most significant structural change to the modern data stack in years — every data team needs to understand the implications.',scores:{practical:88,technical:80,market:96,hype_risk:30,urgency:90,overall:91}},
+  {source:'dbt Labs',cat:'Analytics Engineering',color:'#F0997B',date:'2026-06-01',signal:'HIGH',title:'Fivetran + dbt Labs Complete Merger to Create the Data Infrastructure for Trusted AI Agents',link:'https://www.getdbt.com/blog/fivetran-dbt-labs-complete-merger-to-create-the-data-infrastructure-for-trusted-ai-agents',snippet:'Official press release: Fivetran and dbt Labs are now one company, focused on building the data foundation for the agentic AI era.',why:'Creates a vertically integrated EL+T platform competing directly with Databricks and Snowflake native capabilities.',scores:{practical:85,technical:78,market:95,hype_risk:32,urgency:88,overall:89}},
+  {source:'dbt Labs',cat:'Analytics Engineering',color:'#F0997B',date:'2026-06-01',signal:'HIGH',title:'What We Announced at Snowflake Summit and Why It Matters',link:'https://www.getdbt.com/blog/what-we-announced-at-snowflake-summit-and-why-it-matters',snippet:'dbt State, dbt Wizard, and dbt Core v2.0 announced at Snowflake Summit 2026 alongside the merger completion. dbt Core v2.0 is a major version targeting enterprise scale and AI-driven transformation workflows.',why:'dbt Core v2.0 and dbt Wizard signal a new chapter for analytics engineering — affects every team using dbt today.',scores:{practical:90,technical:88,market:88,hype_risk:25,urgency:85,overall:88}},
+
+  {source:'Snowflake',cat:'Analytics Engineering',color:'#85B7EB',date:'2026-06-02',signal:'HIGH',title:'Snowflake for AI: Putting Intelligence Where Work Happens',link:'https://www.snowflake.com/en/blog/snowflake-for-ai-enterprise-ai-platform/',snippet:'Summit 26 keynote: enterprise AI platform spanning Cortex AI, Snowflake Intelligence, CoWork personal agent, and CoCo coding agent — intelligence embedded into the data platform.',why:'Snowflake\'s shift from data warehouse to AI work platform redefines its competitive surface against Databricks and Microsoft Fabric.',scores:{practical:87,technical:85,market:93,hype_risk:35,urgency:82,overall:88}},
+  {source:'Snowflake',cat:'Analytics Engineering',color:'#85B7EB',date:'2026-06-02',signal:'HIGH',title:'Snowflake CoCo: The Coding Agent Built for Data',link:'https://www.snowflake.com/en/blog/snowflake-coco-ai-coding-agent-modern-data-stack/',snippet:'CoCo is an AI coding agent purpose-built for data — writing SQL, Python, and dbt code with native understanding of schemas, lineage, and governance context inside Snowflake.',why:'A data-native coding agent with schema context is far more useful than general-purpose copilots for data engineering.',scores:{practical:90,technical:88,market:88,hype_risk:30,urgency:82,overall:88}},
+  {source:'Snowflake',cat:'Analytics Engineering',color:'#85B7EB',date:'2026-06-02',signal:'MEDIUM',title:'Build the Interoperable Lakehouse: Agency Over Your Data',link:'https://www.snowflake.com/en/blog/interoperable-lakehouse-architecture/',snippet:'Snowflake\'s interoperable lakehouse architecture — native Apache Iceberg, open catalog APIs, and multi-engine access so any compute engine reads Snowflake-managed data without lock-in.',why:'Open lakehouse architecture directly addresses the biggest enterprise objection to Snowflake: vendor lock-in.',scores:{practical:83,technical:87,market:86,hype_risk:22,urgency:74,overall:84}},
+
+  {source:'Airbyte',cat:'Data Engineering',color:'#5DCAA5',date:'2026-05-20',signal:'HIGH',title:'Designing Idempotent Write Operations for Business Agents',link:'https://airbyte.com/blog/designing-idempotent-write-operations',snippet:'How to ensure agent-driven data writes don\'t create duplicates or race conditions when agents retry failed operations — foundational reliability patterns for production AI agents.',why:'Idempotent writes are the foundational reliability pattern for any agent that touches production data.',scores:{practical:90,technical:92,market:82,hype_risk:15,urgency:82,overall:88}},
+  {source:'Airbyte',cat:'Data Engineering',color:'#5DCAA5',date:'2026-05-19',signal:'HIGH',title:'Airbyte Agents: Available in ChatGPT',link:'https://airbyte.com/blog/airbyte-agents-in-chatgpt',snippet:'Airbyte Agents available as a ChatGPT plugin — users query live business data from 600+ connectors directly inside ChatGPT conversations via Airbyte\'s MCP for trusted context.',why:'Bringing live business data into ChatGPT via Airbyte is the clearest demo yet of context infrastructure as a product category.',scores:{practical:88,technical:84,market:90,hype_risk:28,urgency:82,overall:87}},
+  {source:'Airbyte',cat:'Data Engineering',color:'#5DCAA5',date:'2026-05-04',signal:'HIGH',title:'Airbyte Agents: A New Era for Airbyte',link:'https://airbyte.com/blog/airbyte-agents',snippet:'Airbyte Agents — giving AI agents trusted business context by connecting them to live enterprise data across 600+ sources. Ships alongside the Airbyte Agent SDK and MCP integration.',why:'Airbyte\'s pivot from ELT connector to AI context infrastructure is the biggest strategic repositioning in its history.',scores:{practical:88,technical:85,market:90,hype_risk:30,urgency:85,overall:88}},
+  {source:'Airbyte',cat:'Data Engineering',color:'#5DCAA5',date:'2026-05-04',signal:'HIGH',title:'The Airbyte Agent SDK: Ship Agents, Not Data Plumbing',link:'https://airbyte.com/blog/agent-sdk',snippet:'The Airbyte Agent SDK lets developers embed 600+ data connectors directly into AI agents without building ingestion pipelines. Agents get fresh, structured business data on demand.',why:'Turns data connectors into agent context sources — removes the biggest infrastructure barrier to reliable AI agents.',scores:{practical:92,technical:88,market:88,hype_risk:25,urgency:84,overall:89}},
+  {source:'Airbyte',cat:'Data Engineering',color:'#5DCAA5',date:'2026-05-04',signal:'HIGH',title:'The Airbyte MCP: One Connection, Your Entire Business Context',link:'https://airbyte.com/blog/agent-mcp',snippet:'Airbyte\'s MCP server gives AI agents a single connection to all enterprise data sources — CRMs, databases, warehouses, SaaS — with proper auth, rate limiting, and governance.',why:'A unified MCP for enterprise data access solves the fragmented context problem that makes most AI agents unreliable in production.',scores:{practical:91,technical:89,market:87,hype_risk:22,urgency:83,overall:88}},
+
+  {source:'Dagster',cat:'Data Engineering',color:'#7F77DD',date:'2026-05-28',signal:'HIGH',title:'Snowflake Runs Your Data: Dagster Runs Everything Else',link:'https://dagster.io/blog/snowflake-runs-your-data-dagster-runs-everything-else',snippet:'As Snowflake adds Dynamic Tables and Cortex for transformation, Dagster complements with orchestration, lineage, automation, and cost visibility across the broader platform.',why:'Defines Dagster\'s positioning alongside Snowflake\'s expanding capabilities — critical for teams using both.',scores:{practical:88,technical:83,market:85,hype_risk:18,urgency:78,overall:85}},
+  {source:'Dagster',cat:'Data Engineering',color:'#7F77DD',date:'2026-05-21',signal:'MEDIUM',title:'We Tried ty for Performance. It Found Real Bugs.',link:'https://dagster.io/blog/we-tried-ty-for-performance-it-found-real-bugs',snippet:'Dagster adopted Astral\'s Python type checker ty in their monorepo — found it caught real runtime bugs Pyright missed. Covers migrating a large Python codebase with dramatic compile-time gains.',why:'Type safety tooling that catches real bugs reduces production incidents in large data codebases.',scores:{practical:80,technical:85,market:70,hype_risk:10,urgency:62,overall:76}},
+  {source:'Dagster',cat:'Data Engineering',color:'#7F77DD',date:'2026-05-19',signal:'MEDIUM',title:'The Dagster Almanack: From Complexity to Composability',link:'https://dagster.io/blog/the-dagster-almanack-from-complexity-to-composability',snippet:'A comprehensive guide for data platform engineers covering insights, tips, and predictions around building composable data platforms using Dagster\'s asset-based approach.',why:'Composability is the defining architectural principle separating modern data platforms from legacy monolithic pipelines.',scores:{practical:82,technical:78,market:74,hype_risk:12,urgency:65,overall:77}},
+  {source:'Dagster',cat:'Data Engineering',color:'#7F77DD',date:'2026-04-28',signal:'HIGH',title:'Announcing the Dagster+ Terraform Provider',link:'https://dagster.io/blog/announcing-the-dagster-terraform-provider',snippet:'The Dagster+ Terraform provider lets platform teams manage deployments, access controls, and alerting as code — defining environments declaratively and reviewing changes through pull requests.',why:'Infrastructure-as-code for data orchestration closes the last gap in fully automated, version-controlled data platform deployments.',scores:{practical:87,technical:84,market:80,hype_risk:14,urgency:76,overall:83}},
+
+  {source:'Fivetran',cat:'Analytics Engineering',color:'#639922',date:'2026-06-01',signal:'HIGH',title:'Fivetran + dbt: An Open, Agent-Ready Future for Data Teams',link:'https://www.fivetran.com/blog/fivetran-dbt-an-open-agent-ready-future-for-data-teams',snippet:'Post-merger product vision: dbt Core v2.0, AI-powered connectors, SQLMesh to Linux Foundation, and Great Expectations stewardship. Targets open, agent-ready data infrastructure.',why:'Sets the direction for the dominant ELT platform post-merger — relevant to every data team\'s stack decisions.',scores:{practical:88,technical:85,market:92,hype_risk:30,urgency:84,overall:88}},
+  {source:'Fivetran',cat:'Analytics Engineering',color:'#639922',date:'2025-09-03',signal:'HIGH',title:'Fivetran Acquires Tobiko Data to Power Enterprise-Grade Transformations',link:'https://www.fivetran.com/blog/fivetran-acquires-tobiko-data-to-power-enterprise-grade-transformations',snippet:'Fivetran acquired Tobiko Data, creators of SQLMesh — a modern SQL transformation framework with state-aware migrations, virtual environments, and multi-dialect support.',why:'SQLMesh gives Fivetran a transformation engine more powerful than dbt Core for large-scale enterprise workloads.',scores:{practical:84,technical:86,market:85,hype_risk:28,urgency:76,overall:84}},
+  {source:'Fivetran',cat:'Analytics Engineering',color:'#639922',date:'2026-02-02',signal:'MEDIUM',title:'Census Joins Fivetran\'s Consumption-Based Pricing',link:'https://www.fivetran.com/blog/census-joins-fivetrans-consumption-based-pricing',snippet:'Fivetran aligned Census (now Fivetran Activations) to consumption-based pricing — eliminating the flat fee and combining data movement and activation into a single bill.',why:'Unified pricing for EL + reverse ETL simplifies buying and lowers the commercial barrier for data activation.',scores:{practical:80,technical:68,market:82,hype_risk:18,urgency:68,overall:76}},
+
+  {source:'Astronomer',cat:'Data Platform',color:'#D4537E',date:'2026-05-28',signal:'HIGH',title:'Introducing AI-Assisted Migrations with Otto: Convert Control-M, AutoSys, Automic to Airflow',link:'https://www.astronomer.io/blog/introducing-ai-assisted-migrations-with-otto-your-airflow-expert-for-the-translation-work-that-stalls-every-project/',snippet:'Otto uses AI to convert Control-M, AutoSys, and Automic (UC4) job definitions into production-ready Airflow DAGs — eliminating the manual translation work that stalls enterprise migrations.',why:'Legacy scheduler migrations (Control-M, AutoSys) are the #1 blocker to Airflow adoption in enterprises — AI-assisted conversion removes it.',scores:{practical:93,technical:86,market:88,hype_risk:20,urgency:86,overall:90}},
+  {source:'Astronomer',cat:'Data Platform',color:'#D4537E',date:'2026-05-12',signal:'HIGH',title:'Airflow in Action: ETL Insights from Bloomberg — Slashing Runtimes by 50%',link:'https://www.astronomer.io/blog/airflow-in-action-bloomberg-guide-fine-tuning-airflow-production/',snippet:'Bloomberg\'s Data Platform Engineering team shares four real-world Airflow config fixes that resolved production issues across 2,500+ DAGs with no code changes — slashing runtimes by 50%.',why:'Real production wins at Bloomberg\'s scale (2,500+ DAGs) are the most credible proof points for Airflow best practices.',scores:{practical:92,technical:88,market:82,hype_risk:10,urgency:80,overall:88}},
+  {source:'Astronomer',cat:'Data Platform',color:'#D4537E',date:'2026-05-05',signal:'MEDIUM',title:'Astro Private Cloud 2.0: Disaster Recovery, Governance, and Audit Logging',link:'https://www.astronomer.io/blog/astro-private-cloud-2-0-enterprise-disaster-recovery-governance-audit-logging/',snippet:'Astro Private Cloud 2.0 ships disaster recovery, fine-grained governance controls, and full audit logging for enterprises running Airflow in their own environments.',why:'DR and audit logging are table-stakes for regulated industries — this unblocks financial services and healthcare adoption.',scores:{practical:86,technical:82,market:83,hype_risk:14,urgency:76,overall:82}},
+
+  {source:'Monte Carlo',cat:'Data Platform',color:'#888780',date:'2026-06-01',signal:'HIGH',title:'Integrating Trust into the Agentic Control Plane: Observations from Snowflake Summit',link:'https://montecarlo.ai/blog/agentic-control-plane-snowflake-summit/',snippet:'Monte Carlo shares observations from Snowflake Summit 2026 on integrating data trust into agentic control planes — AI agents need data quality guarantees baked into their execution context.',why:'As agentic architectures mature, data trust must be enforced at the control plane level, not bolted on as observability after failures.',scores:{practical:88,technical:84,market:87,hype_risk:22,urgency:82,overall:86}},
+  {source:'Monte Carlo',cat:'Data Platform',color:'#888780',date:'2025-09-09',signal:'HIGH',title:'Monte Carlo Launches Agent Observability for the Full Data + AI Stack',link:'https://montecarlo.ai/blog/agent-observability-announcement/',snippet:'Monte Carlo launched Agent Observability — the first platform to unify observability across data pipelines and AI agent inputs/outputs, detecting and triaging AI reliability issues in production.',why:'As 80%+ of orgs adopt AI agents, observability across agent inputs and outputs is now a critical reliability requirement.',scores:{practical:90,technical:86,market:88,hype_risk:28,urgency:85,overall:88}},
+  {source:'Monte Carlo',cat:'Data Platform',color:'#888780',date:'2025-06-24',signal:'MEDIUM',title:'Monte Carlo Named #1 Data Observability Platform by G2 for 8th Consecutive Quarter',link:'https://montecarlo.ai/blog/monte-carlo-recognized-as-the-1-data-observability-platform-by-g2-for-8th-consecutive-quarter/',snippet:'Monte Carlo earned G2\'s #1 spot in Data Observability, Data Quality, and Database Monitoring for the 8th straight quarter. Named Databricks\' 2025 Data Governance Partner of the Year.',why:'8 consecutive quarters at #1 signals durable product-market fit validated by real customer reviews.',scores:{practical:72,technical:68,market:82,hype_risk:12,urgency:60,overall:74}},
+
+  {source:'Google Cloud',cat:'Data Platform',color:'#534AB7',date:'2026-06-07',signal:'HIGH',title:'What\'s New in BigQuery: Powering the Agentic Era',link:'https://cloud.google.com/blog/products/data-analytics/unveiling-new-bigquery-capabilities-for-the-agentic-era',snippet:'New BigQuery capabilities: autonomous query optimization, deeper Gemini integration for natural language analytics, multimodal table support, and enhanced AI governance.',why:'BigQuery\'s agentic capabilities make it a direct competitor to Snowflake Intelligence and Databricks AI/BI.',scores:{practical:89,technical:88,market:88,hype_risk:28,urgency:82,overall:88}},
+  {source:'Google Cloud',cat:'Data Platform',color:'#534AB7',date:'2026-06-07',signal:'HIGH',title:'What\'s New with Google Data Cloud',link:'https://cloud.google.com/blog/products/data-analytics/whats-new-with-google-data-cloud',snippet:'Google Data Cloud roundup: BigQuery agentic capabilities, continuous queries GA, LLM-powered SQL 100x faster via proxy models, and managed Apache Airflow scaling for data and AI.',why:'Covers the full Google Data Cloud roadmap in one post — fastest way to track what\'s GA vs preview.',scores:{practical:88,technical:85,market:87,hype_risk:22,urgency:80,overall:86}},
+  {source:'Google Cloud',cat:'Data Platform',color:'#534AB7',date:'2025-04-09',signal:'HIGH',title:'Data Analytics Innovations at Google Cloud Next \'25',link:'https://cloud.google.com/blog/products/data-analytics/data-analytics-innovations-at-next25',snippet:'Google Cloud Next \'25: BigQuery Continuous Queries GA for real-time SQL on streams, multimodal tables preview, automated cataloging GA, and 5x YoY BigQuery growth.',why:'Continuous Queries GA lets SQL analysts process streams without Flink or Dataflow.',scores:{practical:90,technical:88,market:88,hype_risk:25,urgency:82,overall:88}},
+];
+
+let activeSource='all';
+
+function setNav(el,src){
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  activeSource=src;
+  render();
+}
+
+function getFiltered(){
+  const days=parseInt(document.getElementById('winSel').value);
+  const cat=document.getElementById('catSel').value;
+  const sig=document.getElementById('sigSel').value;
+  const cutoff=new Date(Date.now()-days*86400000);
+  return POSTS
+    .filter(a=>activeSource==='all'||a.source===activeSource)
+    .filter(a=>cat==='all'||a.cat===cat)
+    .filter(a=>sig==='all'||a.signal===sig)
+    .filter(a=>new Date(a.date)>=cutoff)
+    .sort((a,b)=>new Date(b.date)-new Date(a.date));
+}
+
+function render(){
+  const articles=getFiltered();
+  const feed=document.getElementById('feed');
+  if(!articles.length){
+    feed.innerHTML='<div class="empty"><h3>No posts match</h3><p>Try expanding the date window.</p></div>';
+    return;
+  }
+  const srcs=new Set(articles.map(a=>a.source)).size;
+  const winLabel=document.getElementById('winSel').options[document.getElementById('winSel').selectedIndex].text;
+  feed.innerHTML=`<div class="hdr"><div class="hdr-title">Updates — ${winLabel}</div><div class="hdr-count">${articles.length} POSTS · ${srcs} SOURCES</div></div>`+articles.map(a=>card(a)).join('');
+}
+
+function card(a){
+  const sc=a.scores,ov=sc.overall||75,isHigh=a.signal==='HIGH';
+  const dateStr=new Date(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return`<div class="card"><div class="ch"><div class="badges">${isHigh?'<span class="badge b-high">High signal</span>':'<span class="badge b-med">Medium</span>'}<span class="badge b-ver">✓ Verified</span></div><div class="score-wrap"><div class="score-lbl">Overall</div><div class="score-num">${ov}</div></div></div><div class="cb"><div class="ct"><a href="${a.link}" target="_blank">${a.title}</a></div><div class="cs"><span class="dot" style="background:${a.color}"></span><strong>${a.source}</strong><span>· ${dateStr}</span></div><div class="grid2"><div><div class="sl">What happened</div><div class="st">${a.snippet}</div><div class="sl" style="margin-top:8px">Why it matters</div><div class="st">${a.why}</div></div><div class="scores-panel"><div class="sl" style="margin-bottom:6px">Signal scores</div>${[['Practical',sc.practical||70],['Technical',sc.technical||70],['Market',sc.market||70],['Hype risk',sc.hype_risk||30],['Urgency',sc.urgency||65],['Overall',ov]].map(([l,v])=>`<div class="sr"><span class="sn">${l}</span><div class="sb"><div class="sf" style="width:${v}%"></div></div><span class="sv">${v}</span></div>`).join('')}</div></div></div><div class="cf"><button class="fb" onclick="window.open('${a.link}','_blank')">↗ Read post</button></div></div>`;
+}
+
+render();
+</script>
+</body>
+</html>
